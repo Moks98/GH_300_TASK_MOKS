@@ -45,6 +45,28 @@
       <p>&copy; 2023 Mergington High School</p>
     </footer>
 
+    <!-- Card template used by app.js -->
+    <template id="activity-template">
+      <article class="activity-card">
+        <div class="activity-header">
+          <h4 class="activity-name"></h4>
+          <span class="activity-capacity"></span>
+        </div>
+        <p class="activity-description"></p>
+
+        <!-- Participants section -->
+        <div class="participants">
+          <h5>Participants</h5>
+          <ul class="participants-list"></ul>
+          <p class="no-participants hidden">No participants yet.</p>
+        </div>
+
+        <div class="activity-actions">
+          <button class="signup-btn">Sign up</button>
+        </div>
+      </article>
+    </template>
+
     <script src="app.js"></script>
   </body>
 </html>

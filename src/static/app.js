@@ -41,6 +41,63 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Replace or ensure the rendering logic uses the template and fills participants
+  async function loadActivities() {
+    const res = await fetch("/activities");
+    const activities = await res.json();
+
+    const list = document.getElementById("activities-list");
+    list.innerHTML = "";
+
+    const template = document.getElementById("activity-template");
+
+    activities.forEach((activity) => {
+      const node = template.content.cloneNode(true);
+      node.querySelector(".activity-name").textContent = activity.name;
+      node.querySelector(".activity-description").textContent = activity.description || "";
+      node.querySelector(".activity-capacity").textContent = `${activity.participants.length}/${activity.max_participants}`;
+
+      // Participants list
+      const participantsList = node.querySelector(".participants-list");
+      const noParticipants = node.querySelector(".no-participants");
+      participantsList.innerHTML = "";
+
+      if (Array.isArray(activity.participants) && activity.participants.length > 0) {
+        noParticipants.classList.add("hidden");
+        activity.participants.forEach((p) => {
+          const li = document.createElement("li");
+          li.textContent = p;
+          participantsList.appendChild(li);
+        });
+      } else {
+        noParticipants.classList.remove("hidden");
+      }
+
+      // Hook up signup button (if desired)
+      const signupBtn = node.querySelector(".signup-btn");
+      signupBtn.addEventListener("click", () => {
+        const email = document.getElementById("email").value;
+        if (!email) {
+          showMessage("Enter an email in the signup form first.", "error");
+          return;
+        }
+        signUpForActivity(activity.name, email).then(() => loadActivities());
+      });
+
+      list.appendChild(node);
+    });
+
+    // Also refresh the select options for the signup form
+    const select = document.getElementById("activity");
+    select.innerHTML = `<option value="">-- Select an activity --</option>`;
+    activities.forEach((a) => {
+      const opt = document.createElement("option");
+      opt.value = a.name;
+      opt.textContent = a.name;
+      select.appendChild(opt);
+    });
+  }
+
   // Handle form submission
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
