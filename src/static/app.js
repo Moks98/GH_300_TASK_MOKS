@@ -66,7 +66,35 @@ document.addEventListener("DOMContentLoaded", () => {
         noParticipants.classList.add("hidden");
         activity.participants.forEach((p) => {
           const li = document.createElement("li");
-          li.textContent = p;
+          li.className = "participant-row";
+
+          const nameSpan = document.createElement("span");
+          nameSpan.className = "participant-email";
+          nameSpan.textContent = p;
+
+          const removeBtn = document.createElement("button");
+          removeBtn.className = "participant-remove";
+          removeBtn.title = `Remove ${p}`;
+          removeBtn.innerHTML = `&times;`;
+          removeBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            // call unregister endpoint
+            try {
+              const resp = await fetch(`/activities/${encodeURIComponent(activity.name)}/unregister?email=${encodeURIComponent(p)}`, { method: "POST" });
+              if (resp.ok) {
+                await loadActivities();
+              } else {
+                const err = await resp.json();
+                showMessage(err.detail || 'Failed to remove participant', 'error');
+              }
+            } catch (err) {
+              console.error('Error unregistering participant', err);
+              showMessage('Failed to remove participant', 'error');
+            }
+          });
+
+          li.appendChild(nameSpan);
+          li.appendChild(removeBtn);
           participantsList.appendChild(li);
         });
       } else {

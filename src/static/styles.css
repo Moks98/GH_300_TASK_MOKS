@@ -105,14 +105,44 @@ section h3 {
 
 .participants-list {
   margin: 0;
-  padding-left: 20px;
-  list-style-type: disc;
+  padding-left: 0;
+  list-style: none;
   color: #1b4359;
 }
 
 .participants-list li {
-  margin: 4px 0;
-  padding: 2px 0;
+  margin: 6px 0;
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(10,36,56,0.02), rgba(10,36,56,0));
+  border-radius: 6px;
+}
+
+.participant-row .participant-email {
+  color: #0b3b5a;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.participant-remove {
+  background: #ffecec;
+  color: #c62828;
+  border: 1px solid rgba(198,40,40,0.12);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.participant-remove:hover {
+  background: #ffd6d6;
 }
 
 .form-group {
